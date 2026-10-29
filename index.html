@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kanat: Hava Parkuru</title>
+  </head>
+  <body>
+    <main id="app">
+      <div id="stage">
+        <video id="webcam" playsinline muted></video>
+        <canvas id="skeleton"></canvas>
+      </div>
+      <div id="trackWarn" class="panel warn" hidden>Tüm vücudun kadrajda olsun</div>
+      <div id="status" class="panel status" hidden></div>
+      <aside id="debug" class="panel debug" hidden></aside>
+      <footer class="panel hint">Space çırp · ←/→ eğil · ↓ squat · ↑ zıpla · T kanat kapa · D debug · R taban</footer>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

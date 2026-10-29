@@ -1,0 +1,19 @@
+# Bağımlılıklar ve derleme çıktısı
+node_modules/
+dist/
+.vite/
+
+# postinstall ile üretilen dosyalar (MediaPipe WASM + poz modeli)
+public/mediapipe/
+public/models/
+
+# Ortam ve yerel ayarlar
+.env
+.env.*
+*.local
+
+# Sistem / editör
+.DS_Store
+.vscode/
+.idea/
+*.log

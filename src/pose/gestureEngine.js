@@ -10,6 +10,10 @@ const LM = {
   lAnkle: 27, rAnkle: 28,
 };
 
+// Kalibrasyonla kişiselleştirilebilen eşik bölümleri
+const TUNABLE = ['tracking', 'flap', 'glide', 'bank', 'squat', 'jump', 'wingsTucked'];
+const defaultTuning = () => Object.fromEntries(TUNABLE.map((k) => [k, { ...CONFIG[k] }]));
+
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 const clamp01 = (v) => clamp(v, 0, 1);
 const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
@@ -88,7 +92,8 @@ export class KeyboardInput {
 export class GestureEngine {
   constructor() {
     this.keyboard = new KeyboardInput();
-    this.counts = { flap: 0, jump: 0, squat: 0, bank: 0 };
+    this.tuning = defaultTuning();
+    this.resetCounts();
     this.resetBaseline();
     this._resetMotionState();
     this.lastSeenMs = -Infinity;
@@ -96,9 +101,27 @@ export class GestureEngine {
     this.metrics = {};
   }
 
+  resetCounts() {
+    this.counts = { flap: 0, jump: 0, squat: 0, bank: 0 };
+  }
+
+  // Kalibrasyon profilindeki eşikleri varsayılanların üzerine yazar
+  applyTuning(overrides = {}) {
+    this.tuning = defaultTuning();
+    for (const [section, values] of Object.entries(overrides)) {
+      if (this.tuning[section]) Object.assign(this.tuning[section], values);
+    }
+  }
+
   // Taban çizgisini sıfırlar; takip stabil olunca yeniden yakalanır (R tuşu)
   resetBaseline() {
     this.baseline = null;
+    this._capture = null;
+  }
+
+  // Kalibrasyonun ayakta duruş adımından gelen taban çizgisi
+  setBaseline({ S, hipY, ankleY, legRatio }) {
+    this.baseline = { S, hipY, ankleY, legRatio };
     this._capture = null;
   }
 
@@ -121,7 +144,7 @@ export class GestureEngine {
     if (landmarks === undefined) return this._repeatLast(nowMs);
     const dt = this.lastMs === null ? 0 : (nowMs - this.lastMs) / 1000;
     this.lastMs = nowMs;
-    const cfg = CONFIG;
+    const cfg = this.tuning;
     const visTh = cfg.tracking.visibilityThreshold;
 
     const out = {
@@ -157,7 +180,7 @@ export class GestureEngine {
       const ankleY = anklesVisible ? (p[LM.lAnkle].y + p[LM.rAnkle].y) / 2 : null;
       // Kalça yüksekliği: ayak bileklerine göre (mesafeden bağımsız oran)
       const legRatio = anklesVisible ? (ankleY - hipMid.y) / S : null;
-      m.S = S;
+      Object.assign(m, { S, hipY: hipMid.y, ankleY, legRatio, noseY: p[LM.nose].y, anklesVisible });
 
       this._updateBaseline({ S, hipY: hipMid.y, ankleY, legRatio }, dt);
       const b = this.baseline;
@@ -271,7 +294,8 @@ export class GestureEngine {
         const spanL = (lSh.x - lW.x) / S; // sol bilek omuzun solunda
         const spanR = (rW.x - rSh.x) / S;
         const tol = cfg.glide.armLevelTolerance;
-        tPose = Math.abs(armYL) < tol && Math.abs(armYR) < tol
+        const n = cfg.glide.neutralArmY;
+        tPose = Math.abs(armYL - n) < tol && Math.abs(armYR - n) < tol
           && spanL > cfg.glide.minArmSpan && spanR > cfg.glide.minArmSpan
           && wristSpeed < cfg.glide.maxWristSpeed;
         Object.assign(m, { spanL, spanR });

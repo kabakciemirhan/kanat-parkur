@@ -147,3 +147,70 @@ html, body {
 .pill.on { background: var(--pink); color: var(--ink); opacity: 1; }
 
 .visList .bar { width: 120px; }
+
+/* Başlangıç / kalibrasyon ekranları — 2–2,5 m'den okunacak büyüklükte */
+#screens {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+#screens .panel { position: relative; pointer-events: auto; }
+
+.card {
+  width: min(560px, calc(100vw - 32px));
+  padding: 28px 32px;
+  text-align: center;
+}
+.card h1 { margin: 0 0 10px; font-size: 30px; font-weight: 700; }
+.card p { margin: 8px 0; font-size: 16px; line-height: 1.45; }
+.card .muted { opacity: 0.6; font-size: 13px; }
+.card .warn-text { color: var(--orange); font-size: 14px; }
+
+.actions { display: flex; gap: 10px; justify-content: center; margin: 18px 0 6px; flex-wrap: wrap; }
+.actions button {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  background: rgba(248, 248, 248, 0.12);
+  color: var(--paper);
+  cursor: pointer;
+}
+.actions button.primary { background: var(--orange); border-color: var(--orange); color: var(--ink); }
+.actions kbd {
+  font: inherit;
+  font-size: 11px;
+  opacity: 0.65;
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+}
+
+.summary { margin: 14px auto 0; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.summary td { padding: 4px 10px; text-align: left; }
+.summary td:last-child { text-align: right; font-weight: 600; }
+
+/* Kalibrasyon paneli üstte, vücudu kapatmaz */
+#screens .calib {
+  align-self: start;
+  margin-top: 24px;
+  width: min(720px, calc(100vw - 32px));
+  padding: 22px 32px 26px;
+  text-align: center;
+}
+.calib-step { font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.7; }
+.calib-title { margin: 6px 0; font-size: 52px; font-weight: 700; color: var(--paper); }
+.calib-text { margin: 0 0 16px; font-size: 24px; line-height: 1.35; }
+.calib-bar { height: 10px; border-radius: 5px; background: rgba(248, 248, 248, 0.15); overflow: hidden; }
+.calib-bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--orange), var(--pink));
+  transition: width 120ms linear;
+}

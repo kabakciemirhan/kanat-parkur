@@ -45,6 +45,7 @@ export const CONFIG = {
   },
 
   glide: {
+    neutralArmY: 0, // Kişinin T-pozdaki bilek seviyesi (omuza göre); kalibrasyon ölçer
     armLevelTolerance: 0.45, // Bilek omuz hizasından en fazla bu kadar (S) sapabilir
     minArmSpan: 1.1, // Bilek-omuz yatay uzaklığı en az bu kadar olmalı (kollar açık)
     maxWristSpeed: 1.5, // Bilek hızı bunun altındaysa "sabit" sayılır (S/saniye)
@@ -76,6 +77,39 @@ export const CONFIG = {
   wingsTucked: {
     aboveNose: 0.0, // Bilekler burnun en az bu kadar (S) üstünde olmalı
     maxWristGap: 0.9, // İki bilek arası en fazla bu kadar (S) olmalı
+  },
+
+  // Kalibrasyon akışı: her adımın süreleri ve ölçümden eşik türetme oranları
+  calibration: {
+    storageKey: 'kanat.calibration.v1', // localStorage anahtarı
+    readyHoldMs: 1000, // Tüm vücut bu süre görünür kalınca kalibrasyon başlar
+    standHoldMs: 2000, // Ayakta, kollar yanda ölçüm süresi
+    tPoseHoldMs: 1500, // T-poz ölçüm süresi
+    flapCycles: 3, // Ölçülecek kol kaldır-indir tekrarı
+    stepTimeoutMs: 12000, // Bir adım bu sürede tamamlanmazsa varsayılan değerlerle geçilir
+    doneScreenMs: 5000, // Özet ekranı bu süre sonra otomatik kapanır (uzaktayken tıklamak zor)
+    maxStandMotion: 0.1, // Ayakta ölçümde kalça bu kadar (S) oynarsa ölçüm yeniden başlar
+
+    // Algılama seviyeleri (kalibrasyon sırasında kullanılır; bilerek gevşek)
+    armsDownLevel: 0.8, // armY bunun üstündeyse kollar yanda sayılır
+    tPoseLevelTol: 0.7, // T-poz için bileğin omuz hizasından max sapması (S)
+    tPoseMinSpan: 0.9, // T-poz için minimum kol açıklığı (S)
+    flapUpLevel: -0.3, // Kol kaldırma tekrarında "yukarıda" sayılma seviyesi
+    flapDownLevel: 0.5, // Kol indirme tekrarında "aşağıda" sayılma seviyesi
+    squatMinDrop: 0.2, // Squat adımında kabul edilen minimum kalça düşüşü (S)
+    squatMaxKneeDeg: 145, // ...ya da diz açısı bunun altına inmeli
+    jumpMinRise: 0.05, // Zıplama adımında kabul edilen minimum yükseliş (S)
+
+    // Ölçümden eşik türetme (oyuncu lehine: eşikler ölçülen hareketin altında tutulur)
+    flapLevelFrac: 0.4, // Kurma/tamamlama seviyeleri genliğin bu oranı kadar içeride
+    flapRefAmpFrac: 0.7, // strength=1 için gereken genlik = ölçülen genliğin bu oranı
+    flapMinSpeedFrac: 0.35, // Minimum iniş hızı = ölçülen tepe hızın bu oranı
+    flapRefSpeedFrac: 0.9, // strength=1 hızı = ölçülen tepe hızın bu oranı
+    tPoseSpanFrac: 0.75, // Glide için kol açıklığı eşiği = ölçülen açıklığın bu oranı
+    squatFullFrac: 0.85, // Rahat squat'ın bu oranında squatDepth=1 olur
+    squatKneeMargin: 5, // Ölçülen en küçük diz açısına eklenen pay (derece)
+    jumpRiseFrac: 0.45, // Zıplama eşiği = ölçülen yükselişin bu oranı
+    jumpSpeedFrac: 0.4, // Kalça hız eşiği = ölçülen tepe hızın bu oranı
   },
 
   keyboard: {

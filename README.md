@@ -11,7 +11,13 @@ npm run dev      # http://localhost:5173 (Chrome)
 
 Model veya WASM eksikse: `npm run setup-assets`.
 
-## Kontroller (Aşama 1)
+## Kalibrasyon (~15 sn)
+
+Açılışta `Enter` ile başlar: dik duruş → T-poz → 3 kez kanat çırpma → rahat bir squat → hafif bir zıplama.
+Sonuçlar tarayıcıda (localStorage) saklanır; sonraki açılışlarda `S` ile atlanabilir. `C` kalibrasyonu yeniden başlatır.
+Bir adım 12 saniyede tamamlanmazsa o hareket için varsayılan eşikler kullanılır.
+
+## Kontroller
 
 | Hareket | Klavye yedeği |
 |---|---|
@@ -22,7 +28,7 @@ Model veya WASM eksikse: `npm run setup-assets`.
 | Zıpla | ↑ |
 | Kolları başın üstünde birleştir | T |
 
-`D` debug panelini açar/kapatır, `R` ayakta duruş tabanını yeniden alır.
+`D` debug panelini açar/kapatır, `R` ayakta duruş tabanını yeniden alır, `C` kalibrasyonu yeniden başlatır.
 
 ## Gizlilik
 

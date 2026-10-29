@@ -20,6 +20,14 @@ html, body {
   background: linear-gradient(180deg, #f6c7a8 0%, #e9a3a8 45%, var(--sand) 100%);
 }
 
+#game {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
 #app {
   position: relative;
   width: 100vw;
@@ -214,3 +222,16 @@ html, body {
   background: linear-gradient(90deg, var(--orange), var(--pink));
   transition: width 120ms linear;
 }
+
+/* Canlı mod: webcam küçük pencere olarak sağ alt köşede */
+body.live #stage {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 260px;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 8px 30px rgba(38, 40, 29, 0.35);
+}
+body.live .hint { bottom: 16px; left: 16px; transform: none; }
+body.nocam #stage { display: none; }

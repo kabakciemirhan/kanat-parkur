@@ -112,6 +112,83 @@ export const CONFIG = {
     jumpSpeedFrac: 0.4, // Kalça hız eşiği = ölçülen tepe hızın bu oranı
   },
 
+  render: {
+    maxPixelRatio: 1.5, // Retina'da çizim çözünürlüğü sınırı (poz modeliyle birlikte 60 FPS için)
+    maxDt: 0.05, // Tek karede ilerletilecek en uzun süre (sn); sekme değişince sıçramayı önler
+  },
+
+  world: {
+    seed: 20261029, // Arazi ve bulutlar için tohum (Aşama 6'da parkur tohumuna bağlanacak)
+    fogColor: '#f3c4b2', // Sis rengi; ufuk rengiyle aynı olmalı
+    fogNear: 250, // Sisin başladığı uzaklık (m)
+    fogFar: 1700, // Sisin tamamen kapattığı uzaklık (m)
+    skyTop: '#a9b4dd', // Gökyüzü tepe rengi (soluk lila-mavi)
+    skyMid: '#f2b5b0', // Gökyüzü orta rengi (pembe)
+    skyHorizon: '#f3c4b2', // Ufuk rengi (sisle aynı)
+    sunColor: '#ffd9a8', // Güneş ve ışık rengi
+    sunDirection: [-0.4, 0.18, -1], // Güneşin yönü (ileri-sol, alçak: gün batımı)
+    terrainSize: 4200, // Arazi karosunun kenar uzunluğu (m)
+    terrainSegments: 105, // Kenar başına poligon sayısı (low-poly görünüm)
+    terrainHeight: 95, // Tepelerin maksimum yüksekliği (m)
+    terrainScale: 700, // Gürültü ölçeği (m); büyükse tepeler daha geniş
+    cloudCount: 70, // Bulut kümesi sayısı
+    puffsPerCloud: 6, // Küme başına top sayısı
+    cloudRadius: 1100, // Bulutların oyuncu etrafında dağıldığı yarıçap (m)
+    cloudLayerMin: 105, // Bulut katmanı alt sınırı (m)
+    cloudLayerMax: 140, // Bulut katmanı üst sınırı (m)
+    highCloudChance: 0.2, // Bulutların bu oranı kuşun seviyesinde/üstünde olur
+  },
+
+  flight: {
+    startAltitude: 190, // Başlangıç yüksekliği (m)
+    cruiseSpeed: 24, // Normal ileri hız (m/sn)
+    maxSpeed: 70, // Mutlak hız sınırı (m/sn)
+    speedResponse: 1.2, // Hızın hedefe yaklaşma oranı (1/sn)
+    gravity: 9, // Yerçekimi (m/sn²)
+    sinkRate: 4, // Çırpmadan süzülürken maksimum düşüş hızı (m/sn)
+    glideSinkRate: 1.2, // T-pozda maksimum düşüş hızı (m/sn); süzülme = neredeyse yatay
+    glideGravityScale: 0.4, // T-pozda yerçekimi çarpanı
+    flapImpulse: 7, // Tek çırpmanın verdiği dikey hız (m/sn), strength ile ölçeklenir
+    flapThrust: 2.5, // Tek çırpmanın verdiği ileri hız (m/sn)
+    maxClimbRate: 14, // Maksimum tırmanma hızı (m/sn)
+    maxTurnRate: 1.1, // bank=1 iken dönüş hızı (rad/sn)
+    bankResponse: 5, // Kuş yatışının girdiye yaklaşma hızı (1/sn)
+    diveSinkRate: 16, // squatDepth=1 iken dalış hızı (m/sn)
+    diveSpeedBonus: 14, // squatDepth=1 iken ek ileri hız (m/sn)
+    boostSpeed: 20, // Zıplamanın verdiği ek hız (m/sn)
+    boostDecay: 1.3, // Boost'un sönme zaman sabiti (sn)
+    tuckSpeedBonus: 12, // Kanat kapamada ek hız (m/sn)
+    tuckSinkRate: 9, // Kanat kapamada düşüş hızı (m/sn)
+    groundClearance: 14, // Araziye bu kadar yaklaşınca kuş yumuşakça yukarı itilir (m)
+    groundBounce: 4, // Zemine değince verilen yukarı hız (m/sn)
+    ceiling: 380, // Bu yüksekliğin üstünde tırmanma yumuşakça kesilir (m)
+  },
+
+  bird: {
+    wingResponse: 14, // Kanatların kol açısına yaklaşma hızı (1/sn); yüksek = birebir
+    maxWingUpDeg: 80, // Kanadın en fazla kalkış açısı
+    maxWingDownDeg: -65, // Kanadın en fazla iniş açısı
+    maxRollDeg: 55, // bank=1 iken görsel yatış açısı
+    squatPitchDeg: 35, // squatDepth=1 iken öne eğilme açısı
+    flipDuration: 0.7, // Zıplamada takla süresi (sn)
+    autoFlapDuration: 0.35, // Kol verisi yokken (klavye) bir çırpma animasyonunun süresi (sn)
+  },
+
+  cameraRig: {
+    distance: 14, // Kuşun arkasındaki uzaklık (m)
+    height: 7, // Kuşun üstündeki yükseklik (m); kanatlar üstten görünsün diye yüksek
+    lookAhead: 10, // Kuşun ne kadar önüne bakılacağı (m)
+    followResponse: 4, // Takip yumuşaklığı (1/sn); küçük = daha gecikmeli
+    baseFov: 62, // Normal görüş açısı (derece)
+    boostFov: 82, // Boost sırasında görüş açısı (derece)
+    fovResponse: 3, // FOV değişim hızı (1/sn)
+    rollFollow: 0.25, // Kameranın kuş yatışını izleme oranı
+  },
+
+  game: {
+    keyboardGraceMs: 5000, // Son klavye girdisinden bu süre içinde kadraj kaybı oyunu duraklatmaz
+  },
+
   keyboard: {
     squatDepth: 1.0, // ↓ basılıyken üretilen squat derinliği
     bankValue: 1.0, // ←/→ basılıyken üretilen bank büyüklüğü
@@ -119,7 +196,7 @@ export const CONFIG = {
   },
 
   debug: {
-    showOnStart: true, // Aşama 1'de debug paneli açık başlar
+    showOnStart: false, // Debug paneli kapalı başlar (D ile açılır)
     uiUpdateMs: 66, // Debug paneli yenileme aralığı (~15 Hz; DOM maliyetini azaltır)
     eventFlashMs: 400, // Flap/jump olayı panelde bu kadar süre vurgulanır
   },

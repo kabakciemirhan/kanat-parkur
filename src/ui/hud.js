@@ -29,7 +29,12 @@ export class Hud {
   }
 
   // Her render karesinde çağrılır; DOM yalnızca uiUpdateMs aralığında yenilenir
-  update(nowMs, gesture, metrics, tracker, counts) {
+  // Oyun kadraj kaybı yüzünden duraklatıldıysa uyarıyı göster
+  setTrackWarning(visible) {
+    this.trackWarnEl.hidden = !visible;
+  }
+
+  update(nowMs, gesture, metrics, tracker, counts, flight) {
     this._frames++;
     if (nowMs - this._fpsStart >= 1000) {
       this.renderFps = (this._frames * 1000) / (nowMs - this._fpsStart);
@@ -43,14 +48,12 @@ export class Hud {
     }
     if (gesture.jump) this.flashUntil.jump = nowMs + CONFIG.debug.eventFlashMs;
 
-    this.trackWarnEl.hidden = gesture.tracked || !tracker.hasCamera;
-
     if (!this.debugVisible || nowMs - this.lastUi < CONFIG.debug.uiUpdateMs) return;
     this.lastUi = nowMs;
-    this.debugEl.innerHTML = this._render(nowMs, gesture, metrics, tracker, counts);
+    this.debugEl.innerHTML = this._render(nowMs, gesture, metrics, tracker, counts, flight);
   }
 
-  _render(nowMs, g, m, tracker, counts) {
+  _render(nowMs, g, m, tracker, counts, flight) {
     const flapOn = nowMs < this.flashUntil.flap;
     const jumpOn = nowMs < this.flashUntil.jump;
     const bar = (v, signed = false) => {
@@ -83,6 +86,13 @@ export class Hud {
         <div class="row"><span>jump</span>${pill(jumpOn, 'ZIPLA')}</div>
         <div class="row"><span>wingsTucked</span>${pill(g.wingsTucked, 'KAPAT')}</div>
         <div class="row"><span>Sayaç</span><b>flap ${counts.flap} · squat ${counts.squat} · zıpla ${counts.jump} · eğil ${counts.bank}</b></div>
+      </section>
+      <h4>Uçuş</h4>
+      <section>
+        <div class="row"><span>Hız (m/sn)</span><b>${fmt(flight?.speed, 1)}</b></div>
+        <div class="row"><span>İrtifa / dikey hız</span><b>${fmt(flight?.position.y, 0)} / ${fmt(flight?.vy, 1)}</b></div>
+        <div class="row"><span>Boost</span>${bar(flight?.boostLevel ?? 0)}<b>${fmt(flight?.boostLevel)}</b></div>
+        <div class="row"><span>Kol açısı sol / sağ°</span><b>${fmt(g.arms?.left, 0)} / ${fmt(g.arms?.right, 0)}</b></div>
       </section>
       <h4>Ham metrikler (S = omuz genişliği)</h4>
       <section class="metrics">

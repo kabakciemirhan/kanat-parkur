@@ -97,6 +97,7 @@ export class GestureEngine {
     this.resetBaseline();
     this._resetMotionState();
     this.lastSeenMs = -Infinity;
+    this.lastKeyboardMs = -Infinity;
     this.lastMs = null;
     this.metrics = {};
   }
@@ -155,6 +156,7 @@ export class GestureEngine {
       jump: false,
       wingsTucked: false,
       tracked: false,
+      arms: { left: null, right: null }, // kol açıları (derece); görünmüyorsa null
     };
     const m = { visibility: {}, baselineProgress: this.baseline ? 1 : (this._capture?.progress ?? 0) };
 
@@ -247,6 +249,10 @@ export class GestureEngine {
       );
       Object.assign(m, { armY, armYL, armYR, wristSpeed });
 
+      // Kol açıları (derece, + = yukarı): kuşun kanatları bunlara birebir bağlanır
+      const armAngle = (sh, w) => (Math.atan2(sh.y - w.y, Math.abs(w.x - sh.x)) * 180) / Math.PI;
+      out.arms = { left: lWv ? armAngle(lSh, lW) : null, right: rWv ? armAngle(rSh, rW) : null };
+
       // --- Wings tucked: bilekler başın üstünde ve birbirine yakın ---
       if (lWv && rWv) {
         const nose = p[LM.nose];
@@ -320,6 +326,7 @@ export class GestureEngine {
       out.squatDepth = 0;
       out.jump = false;
       out.wingsTucked = false;
+      out.arms = { left: null, right: null };
     }
 
     this.lastPoseOut = { ...out, flap: { ...out.flap } };
@@ -338,7 +345,9 @@ export class GestureEngine {
     };
     const out = { ...base, flap: { event: false, strength: 0 }, jump: false };
     out.tracked = nowMs - this.lastSeenMs < CONFIG.tracking.lostTimeoutMs;
-    if (!out.tracked) Object.assign(out, { glide: false, bank: 0, squatDepth: 0, wingsTucked: false });
+    if (!out.tracked) {
+      Object.assign(out, { glide: false, bank: 0, squatDepth: 0, wingsTucked: false, arms: { left: null, right: null } });
+    }
     this._mergeKeyboard(out);
     this._count(out);
     this.metrics.keyboard = this._lastKeyboard;
@@ -350,6 +359,7 @@ export class GestureEngine {
     const k = this.keyboard.read();
     const kc = CONFIG.keyboard;
     this._lastKeyboard = k.any;
+    if (k.any) this.lastKeyboardMs = performance.now();
     if (k.flap) out.flap = { event: true, strength: kc.flapStrength };
     if (k.jump) out.jump = true;
     if (k.bank !== 0) out.bank = k.bank * kc.bankValue;

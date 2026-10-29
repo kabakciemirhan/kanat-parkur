@@ -28,7 +28,11 @@ Bir adım 12 saniyede tamamlanmazsa o hareket için varsayılan eşikler kullan�
 | Zıpla | ↑ |
 | Kolları başın üstünde birleştir | T |
 
-`D` debug panelini açar/kapatır, `R` ayakta duruş tabanını yeniden alır, `C` kalibrasyonu yeniden başlatır.
+`P` / `Esc` duraklatır, `D` debug panelini açar/kapatır, `R` ayakta duruş tabanını yeniden alır, `C` kalibrasyonu yeniden başlatır.
+
+Kamerasız (yalnızca klavye) test: `http://localhost:5173/?nocam`
+
+Omuzlar ya da kalçalar 0,5 sn kadraj dışında kalırsa oyun otomatik duraklar (son 5 sn içinde klavye kullanıldıysa duraklamaz).
 
 ## Gizlilik
 
